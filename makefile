@@ -1,5 +1,5 @@
 protos: proto/service.proto
-	protoc proto/service.proto --go_out=plugins=grpc:.
+	protoc protos/service.proto --go_out=plugins=grpc:.
 
 update:
 	export PATH=$PATH:/usr/local/go/bin
