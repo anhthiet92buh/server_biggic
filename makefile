@@ -1,14 +1,18 @@
 protos: protos/service.proto
 	protoc protos/service.proto --go_out=plugins=grpc:.
-	protoc protos/service.proto --dart_out=plugins=grpc:.
-
+	protoc --dart_out=grpc:protos/ -Iprotos protos/service.proto
+	
 update:
-	export PATH=$PATH:/usr/local/go/bin
+	dart pub global activate protoc_plugin
+	export PATH=${PATH}:/usr/local/go/bin
+	export PATH="${PATH}:${HOME}/.local/bin"
+	export PATH="${PATH}:${HOME}/.pub-cache/bin"
 
 gomod:
 	go mod init github.com/anhthiet92buh/server_biggic
 	go mod tidy
 rm_gomod:
 	rm -rf go.mod go.sum
+.PHONY: protos
 clean:
-	rm -rf proto/*.go
+	rm -rf protos/*.go protos/*.dart
