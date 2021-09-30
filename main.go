@@ -30,6 +30,19 @@ type Server struct {
 	Connection []*Connection
 }
 
+func (s *Server) CreateStream(pconn *protos.Connect, stream  protos.Broadcast_CreateStreamServer) error{
+	conn := &Connection{
+		stream: stream,
+		id: pconn.User.Id,
+		active: true,
+		error: make(chan error),
+	}
+
+	s.Connection = append(s.Connection, conn)
+
+	return <-conn.error
+}
+
 func (s *Server) BroadcastMessage(ctx context.Context, msg *protos.Message) (*protos.Close, error){
 	wait := sync.WaitGroup{}
 	done := make(chan int)
