@@ -4,5 +4,10 @@ protos: proto/service.proto
 update:
 	export PATH=$PATH:/usr/local/go/bin
 
+gomod:
+	go mod init github.com/anhthiet92buh/server_biggic
+	go mod tidy
+rm_gomod:
+	rm -rf go.mod go.sum
 clean:
 	rm -rf proto/*.go

@@ -10,9 +10,10 @@ import (
 	"log"
 	"os"
 	"sync"
-	"google.golang.org/grpc"
+	"time"
 
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/anhthiet92buh/server_biggic/protos"
+	"google.golang.org/grpc"
 )
 
 
@@ -81,7 +82,7 @@ func main()  {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan(){
 			msg := &protos.Message{
-				Id: user.id,
+				Id: user.Id,
 				Content: scanner.Text(),
 				Timestamp: timestamp.String(),
 			}
