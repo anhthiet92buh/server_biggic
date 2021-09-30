@@ -1,4 +1,4 @@
-protos: proto/service.proto
+protos: protos/service.proto
 	protoc protos/service.proto --go_out=plugins=grpc:.
 	protoc protos/service.proto --dart_out=plugins=grpc:.
 
