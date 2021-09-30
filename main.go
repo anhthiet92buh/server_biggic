@@ -75,7 +75,7 @@ func main()  {
 
 	grpcLog.Info("Starting Server at port: 8080")
 
-	protos.RegisterBroadcastServer(grpcServer,server)
+	protos.RegisterBroadcastServer(grpcServer, server)
 	grpcServer.Serve(listener)
 	
 }
