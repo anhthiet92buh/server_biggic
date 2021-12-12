@@ -8,7 +8,7 @@ import (
 	"sync"
 	"google.golang.org/grpc"
 	glog "google.golang.org/grpc/grpclog"
-	"protos/service.pb.go"
+	"github.com/anhthiet92buh/server_biggic/protos"
 )
 
 var grpcLog glog.LoggerV2

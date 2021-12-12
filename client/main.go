@@ -11,8 +11,7 @@ import (
 	"os"
 	"sync"
 	"time"
-	"protos/service.pb.go"
-	// "github.com/anhthiet92buh/server_biggic/protos"
+	"github.com/anhthiet92buh/server_biggic/protos"
 	"google.golang.org/grpc"
 )
 
