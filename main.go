@@ -6,10 +6,9 @@ import (
 	"net"
 	"os"
 	"sync"
-
-	"github.com/anhthiet92buh/server_biggic/protos"
 	"google.golang.org/grpc"
 	glog "google.golang.org/grpc/grpclog"
+	"protos/service.pb.go"
 )
 
 var grpcLog glog.LoggerV2
