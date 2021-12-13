@@ -2,25 +2,15 @@ syntax = "proto3";
 
 package protos;
 
-message User{
-    string id = 1;
-    string name = 2;
-}
+option go_package = "github.com/anhthiet92buh/server_biggic/protos";
 
-message Message{
-    string id = 1;
-    string content = 2;
-    string timestamp = 3;
-}
 
-message Connect{
-    User user = 1;
-    bool active = 2;
-}
+//Struct message Client send to Server or Server send back to Client
+message keyWord{
+    string clientString = 1;
+};
 
-message Close{}
-
-service Broadcast{
-    rpc CreateStream(Connect) returns (stream Message);
-    rpc BroadcastMessage (Message) returns (Close);
+//Service: Client to Server, Server to Client
+service mainService{
+    rpc mainKeyWord(keyWord) returns (keyWord);
 }
