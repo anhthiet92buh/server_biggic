@@ -10,7 +10,7 @@ import (
 
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/examples/data"
-	// pb "github.com/anhthiet92buh/server_biggic/protos"
+	pb "github.com/anhthiet92buh/server_biggic/protos"
 )
 
 var (
