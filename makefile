@@ -27,6 +27,7 @@ exportPath:
 	export GOROOT=/usr/local/go && export GOPATH=$HOME/go && export GOBIN=$GOPATH/bin && export PATH=$PATH:$GOROOT:$GOPATH:$GOBIN
 
 gomod:
+	rm -rf go.mod go.sum
 	go mod init github.com/anhthiet92buh/server_biggic
 	go mod tidy
 rm_gomod:

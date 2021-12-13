@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net"
+
 	"google.golang.org/grpc"
 
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/examples/data"
-
-	pb "github.com/anhthiet92buh/server_biggic/protos"
+	// pb "github.com/anhthiet92buh/server_biggic/protos"
 )
+
 var (
 	tls        = flag.Bool("tls", false, "Connection uses TLS if true, else plain TCP")
 	certFile   = flag.String("cert_file", "", "The TLS cert file")
@@ -20,10 +21,10 @@ var (
 	port       = flag.Int("port", 10000, "The server port")
 )
 
-func main ()  {
+func main() {
 	flag.Parse()
-	lis,err	:= net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
-	if err!=nil {
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
+	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
@@ -44,5 +45,5 @@ func main ()  {
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterMainServiceServer(grpcServer, newServer())
 	grpcServer.Serve(lis)
-	
+
 }
