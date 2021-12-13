@@ -21,6 +21,14 @@ var (
 	port       = flag.Int("port", 10000, "The server port")
 )
 
+type mainServer struct{
+	pb.UnimplementedMainServiceServer
+}
+
+func (s *mainServer) MainKeyWord(ctx context.Context, keyword *pb.KeyWord) (*pb.KeyWord, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MainKeyWord not implemented")
+}
+
 func main() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))

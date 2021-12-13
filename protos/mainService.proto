@@ -6,11 +6,13 @@ option go_package = "github.com/anhthiet92buh/server_biggic/protos";
 
 
 //Struct message Client send to Server or Server send back to Client
-message keyWord{
+message keyWordC{
     string clientString = 1;
 };
-
+message keyWordS{
+    string clientString = 1;
+};
 //Service: Client to Server, Server to Client
 service mainService{
-    rpc mainKeyWord(keyWord) returns (keyWord);
+    rpc mainKeyWord(keyWordC) returns (keyWordS); // Client send keyWordC to Server AND Server send back keyWordS to Client
 }
