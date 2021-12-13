@@ -1,17 +1,16 @@
 main: main.go
 	go run main.go
 
-protos: protos/service.proto
+protos: protos/mainService.proto
 	protoc protos/service.proto --go_out=plugins=grpc:.
 	protoc --dart_out=grpc:protos/ -Iprotos protos/service.proto
 
-Dproto: protos/service.proto
+Dproto: protos/mainService.proto
 	rm -rf protos/*.go
 	protoc --dart_out=grpc:protos/ -Iprotos protos/service.proto
-Gproto: protos/service.proto
+Gproto: protos/mainService.proto
 	rm -rf protos/*.dart
-	# protoc protos/service.proto --go_out=plugins=grpc:.
-	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/service.proto
+	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/mainService.proto
 	
 deno:
 	export DENO_INSTALL="/home/$USER/.deno"

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/examples/data"
 
-	
+	pb "github.com/anhthiet92buh/server_biggic/protos"
 )
 var (
 	tls        = flag.Bool("tls", false, "Connection uses TLS if true, else plain TCP")
@@ -42,7 +42,7 @@ func main ()  {
 		opts = []grpc.ServerOption{grpc.Creds(creds)}
 	}
 	grpcServer := grpc.NewServer(opts...)
-	pb.RegisterRouteGuideServer(grpcServer, newServer())
+	pb.RegisterMainServiceServer(grpcServer, newServer())
 	grpcServer.Serve(lis)
 	
 }
