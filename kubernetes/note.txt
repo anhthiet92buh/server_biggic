@@ -1,0 +1,3 @@
+Note!!
+
+field sessionAffinity in Service yaml file??? How to explan....

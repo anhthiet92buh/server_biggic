@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -8,16 +9,16 @@ import (
 
 	"google.golang.org/grpc"
 
+	pb "github.com/anhthiet92buh/server_biggic/protos"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/examples/data"
-	pb "github.com/anhthiet92buh/server_biggic/protos"
 )
 
 var (
 	tls        = flag.Bool("tls", false, "Connection uses TLS if true, else plain TCP")
 	certFile   = flag.String("cert_file", "", "The TLS cert file")
 	keyFile    = flag.String("key_file", "", "The TLS key file")
-	jsonDBFile = flag.String("json_db_file", "", "A json file containing a list of features")
+	// jsonDBFile = flag.String("json_db_file", "", "A json file containing a list of features")
 	port       = flag.Int("port", 10000, "The server port")
 )
 
@@ -25,8 +26,12 @@ type mainServer struct{
 	pb.UnimplementedMainServiceServer
 }
 
-func (s *mainServer) MainKeyWord(ctx context.Context, keyword *pb.KeyWord) (*pb.KeyWord, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MainKeyWord not implemented")
+func (*mainServer) MainKeyWord(ctx context.Context,keyWC *pb.KeyWordC) (*pb.KeyWordS, error) {
+	fmt.Print("Da nhan duoc KeyWord tu Client:",keyWC.ClientString)
+	resp := &pb.KeyWordS{
+		ClientString:         "Server da nhan duoc keyWordC tu client",
+	}
+	return resp,nil
 }
 
 func main() {
@@ -51,7 +56,7 @@ func main() {
 		opts = []grpc.ServerOption{grpc.Creds(creds)}
 	}
 	grpcServer := grpc.NewServer(opts...)
-	pb.RegisterMainServiceServer(grpcServer, newServer())
+	pb.RegisterMainServiceServer(grpcServer, &mainServer{})
 	grpcServer.Serve(lis)
 
 }

@@ -1,3 +1,4 @@
+
 main: main.go
 	go run main.go
 
@@ -19,7 +20,7 @@ updatego:
 	go get -u all
 updatedart:
 	dart pub global activate protoc_plugin
-exportPath:
+exportPath: #Just copy and paste to Terninal, Do not use commandline "make exportPath" in Terninal
 	export PATH="$PATH:$(go env GOPATH)/bin"
 	export PATH=$PATH:/usr/local/go/bin
 	export PATH="$PATH:$HOME/.local/bin"
@@ -35,8 +36,11 @@ rm_gomod:
 firstGit:
 	git config --global user.email "anhthiet92buh@gmail.com"
 	git config --global user.name "Thiet"
+goInstall:
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 .PHONY: protos
 clean:
 	rm -rf protos/*.go protos/*.dart
-environment:
-	export PATH="$PATH:$PWD/"
+
+#checking file large size on root disk: du -ahx . | sort -rh | head -20

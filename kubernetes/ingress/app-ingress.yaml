@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app
+  namespace: ingress-controller
+spec:
+  rules:
+  - host: biggic.com
+    http:
+      paths:
+      - path: "/"
+        backend:
+          serviceName: http-test-svc
+          servicePort: 80

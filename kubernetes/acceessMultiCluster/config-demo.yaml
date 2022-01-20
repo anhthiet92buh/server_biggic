@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Congfig
+preferences: {}
+
+clusters:
+- cluster: 
+  name: development
+- cluster:
+  name: scaratch
+
+
+users:
+- name: development
+- name: experimenter
+
+contexts:
+- context:
+  name: dev-frontend
+- context:
+  name: dev-storage
+- context:
+  name: exp-scratch

@@ -1,0 +1,43 @@
+NODE_IP="192.168.174.235"
+
+ETCD_NAME=$(hostname -s)
+
+ETCD1_IP="192.168.174.235"
+ETCD2_IP="192.168.174.236"
+ETCD3_IP="192.168.174.10"
+
+
+cat <<EOF >/etc/systemd/system/etcd.service
+[Unit]
+Description=etcd
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/etcd \\
+  --name ${ETCD_NAME} \\
+  --initial-advertise-peer-urls http://${NODE_IP}:2380 \\
+  --listen-peer-urls http://${NODE_IP}:2380 \\
+  --advertise-client-urls http://${NODE_IP}:2379 \\
+  --listen-client-urls http://${NODE_IP}:2379,http://127.0.0.1:2379 \\
+  --initial-cluster-token etcd-cluster-1 \\
+  --initial-cluster etcd1=http://${ETCD1_IP}:2380,etcd2=http://${ETCD2_IP}:2380,etcd3=http://${ETCD3_IP}:2380 \\
+  --initial-cluster-state new
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+go install github.com/mattn/goreman@latest
+
+Create environment: $PRIVATE_IP="machine_ip"
+
+#New video
+
+GOROOT=/usr/local/go
+#Reload environment for add Goroot
+source /etc/environment
+file cer ...
+CERT_HOSTNAME=192.168.174.10,worker2,192.168.174.236,worker1,192.168.235,127.0.0.1,localhost

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: confi-postgres
+  labels:
+    type: postsqlLocal
+  namespace: ns-postgresql
+data:
+  POSTGRES_DB: postgresdb
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: "11520380"

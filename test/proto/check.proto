@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package protos;
+
+option go_package = ".;protos";
+
+message mClient{
+    string strClient =1;
+};
+
+message mServer{
+    string strServer = 1;
+};
+
+service checkService{
+    rpc checkStruct (mClient) returns (mServer);
+}
