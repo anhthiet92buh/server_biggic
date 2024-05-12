@@ -119,3 +119,53 @@ Buoc 3: Set up a High Availability etcd Cluster with kubeadm
         systemctl enable keepalived --now
     - Kubeadm init:
         kubeadm init --control-plane-endpoint vip.mycluster.local:8443 [additional arguments ...]
+New Test
+After finish all off the VM for Kmaster, Kworker, Loadbalancer
+
+- Change MASTER -> BACKUP in Loabalancer VM
+- Changer SystemCgoup=true -> systemctl restart containerd
+- kubeadm init --control-plane-endpoint="192.168.0.101:6443" --upload-certs --apiserver-advertise-address=192.168.0.100 --pod-network-cidr=10.244.0.0/16
+
+    - kubeadm join 192.168.0.70:6443 --token h4vlgy.2jg5siiwrlu6jn5r --discovery-token-ca-cert-hash sha256:35caa07a4a349ab92c642d06306ef3f0bfcb8bee4b082ee2ad16acf1087a392a --control-plane --certificate-key 924c6951b32bb84554cfff76d917255b8ffe9c4c88e5e9e878501f24e177c554 --apiserver-advertise-address=192.168.0.72
+    - -> Join Kworker VM
+
+Fix coredns Pending
+    kubectl describe pod coredns-787d4945fb-9k5cl -n kube-system
+    kubectl delete pods --all
+    kubeadm config images pull
+
+cat << EOF | tee /etc/cni/net.d/10-containerd-net.conflist
+{
+ "cniVersion": "1.0.0",
+ "name": "containerd-net",
+ "plugins": [
+   {
+     "type": "bridge",
+     "bridge": "cni0",
+     "isGateway": true,
+     "ipMasq": true,
+     "promiscMode": true,
+     "ipam": {
+       "type": "host-local",
+       "ranges": [
+         [{
+           "subnet": "10.244.0.0/16"
+         }],
+         [{
+           "subnet": "2001:db8:4860::/64"
+         }]
+       ],
+       "routes": [
+         { "dst": "0.0.0.0/0" },
+         { "dst": "::/0" }
+       ]
+     }
+   },
+   {
+     "type": "portmap",
+     "capabilities": {"portMappings": true},
+     "externalSetMarkChain": "KUBE-MARK-MASQ"
+   }
+ ]
+}
+EOF
