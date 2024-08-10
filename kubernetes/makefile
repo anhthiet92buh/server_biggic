@@ -184,3 +184,111 @@ Master -> Backup in /etc/containerd/config.toml => systemctl restart containerd
 kmaster 1
 kubeadm init --control-plane-endpoint="192.168.1.190:6443" --upload-certs --apiserver-advertise-address=192.168.1.191 --pod-network-cidr=10.244.0.0/16
 kubeadm config images pull
+
+#Deploy PgAdmin
+Step 1: Create file pg-secret.yaml
+    apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+    name: pgadmin
+    data: #Put encode base64 here, to show key: echo "Anhthiet92buh@" | base64
+kubectl apply -f pg-secret.yaml
+
+Step 2: ConfigMap, Create file pg-config.yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+    name: pgadmin-config
+    data:
+    servers.json: |
+    {
+        "Servers": {
+            "1": {
+            "Name": "PostgreSQL DB",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "postgres",
+            "Host": "postgres.domain.com",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+            }
+        }
+    }
+kubectl apply -f pg-config.yaml
+
+Step 3: Service, create file pg-service.yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: pgadmin-service
+    spec:
+    ports:
+    - protocol: TCP
+    port: 80
+    targetPort: http
+    selector:
+    app: pgadmin
+    type: NodePort
+kubectl apply -f pg-service.yaml
+
+Step 4: StatefulSet, Create file pg-statefulset.yaml
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: pgadmin
+spec:
+ serviceName: pgadmin-service
+ podManagementPolicy: Parallel
+ replicas: 1
+ updateStrategy:
+   type: RollingUpdate
+ selector:
+   matchLabels:
+     app: pgadmin
+ template:
+   metadata:
+     labels:
+       app: pgadmin
+   spec:
+     terminationGracePeriodSeconds: 10
+     containers:
+       - name: pgadmin
+         image: dpage/pgadmin4:5.4
+         imagePullPolicy: Always
+         env:
+         - name: PGADMIN_DEFAULT_EMAIL
+           value: user@domain.com
+         - name: PGADMIN_DEFAULT_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: pgadmin
+               key: pgadmin-password
+         ports:
+         - name: http
+           containerPort: 80
+           protocol: TCP
+         volumeMounts:
+         - name: pgadmin-config
+           mountPath: /pgadmin4/servers.json
+           subPath: servers.json
+           readOnly: true
+         - name: pgadmin-data
+           mountPath: /var/lib/pgadmin
+     volumes:
+     - name: pgadmin-config
+       configMap:
+         name: pgadmin-config
+ volumeClaimTemplates:
+ - metadata:
+     name: pgadmin-data
+   spec:
+     accessModes: [ "ReadWriteOnce" ]
+     resources:
+       requests:
+         storage: 3Gi
+
+kubectl apply -f pg-statefulset.yaml
+
+
