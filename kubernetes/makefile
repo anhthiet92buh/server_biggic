@@ -290,13 +290,3 @@ spec:
          storage: 3Gi
 
 kubectl apply -f pg-statefulset.yaml
-
-
-# Kubernete New 26/06/2024
-
-Fix CGroup in /etc/keepalived/keepalived.conf  in Loadbalancer
-Master -> Backup in /etc/containerd/config.toml => systemctl restart containerd
-
-kmaster 1
-kubeadm init --control-plane-endpoint="192.168.1.190:6443" --upload-certs --apiserver-advertise-address=192.168.1.191 --pod-network-cidr=10.244.0.0/16
-kubeadm config images pull
